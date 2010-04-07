@@ -18,6 +18,7 @@ def saveScience(data, header, basedir, fieldid, visitid, filterid, snapid, ccdid
         
     outfile = '%s/c%s-a%s.fits' % (outdir, ccdid, ampid)
     print '# writing', outfile
+    header.update('DC3bPATH', outfile)
     pyfits.PrimaryHDU(data, header).writeto(outfile, output_verify='silentfix', clobber=True)
     
 def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filter = None):
@@ -34,12 +35,13 @@ def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filter =
     
     outfile = '%s/c%s-a%s.fits' % (outdir, ccdid, ampid)
     print '# writing', outfile
+    header.update('DC3bPATH', outfile)
     pyfits.PrimaryHDU(data, header).writeto(outfile, output_verify='silentfix', clobber=True)
 
 
 if __name__ == '__main__':
     for file in sys.argv[1:]:
-        basedir = os.path.dirname(file)
+        basedir = os.path.dirname(os.path.abspath(file))
         ptr     = pyfits.open(file)
         head    = ptr[0].header
 
@@ -71,7 +73,7 @@ if __name__ == '__main__':
             cfhtAmpA  = data[0:4644, 0:1056]
             cfhtAmpB  = data[0:4644, 1056:2112]
 
-            saveScience(cfhtAmpA, header, basedir, fieldid, visitid, filterid, snapid, ccd-1, 0)
-            saveScience(cfhtAmpB, header, basedir, fieldid, visitid, filterid, snapid, ccd-1, 1)
+            saveScience(cfhtAmpA, header.copy(), basedir, fieldid, visitid, filterid, snapid, '%02d' % (ccd-1), 0)
+            saveScience(cfhtAmpB, header.copy(), basedir, fieldid, visitid, filterid, snapid, '%02d' % (ccd-1), 1)
                         
             #print data.shape, cfhtAmpA.shape, cfhtAmpB.shape
