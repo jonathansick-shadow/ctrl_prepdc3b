@@ -8,6 +8,7 @@ import string
 import sys
 import os
 import pyfits
+import numpy
 
 def saveScience(data, header, basedir, fieldid, visitid, filterid, snapid, ccdid, ampid):
     # CFHTLS/%(field)/raw/v%(visitid)-f%(filterid)/s%(snapid)/c%(ccdid)-a%(ampid).fits
@@ -19,7 +20,7 @@ def saveScience(data, header, basedir, fieldid, visitid, filterid, snapid, ccdid
     outfile = '%s/c%s-a%s.fits' % (outdir, ccdid, ampid)
     print '# writing', outfile
     header.update('DC3bPATH', outfile)
-    pyfits.PrimaryHDU(data, header).writeto(outfile, output_verify='silentfix', clobber=True)
+    pyfits.PrimaryHDU(data.astype(numpy.int16), header).writeto(outfile, output_verify='silentfix', clobber=True)
     
 def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filter = None):
     # CFHTLS/%(dtype)/v%(dateid)/c%(ccdid)-a%(ampid).fits
@@ -36,7 +37,7 @@ def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filter =
     outfile = '%s/c%s-a%s.fits' % (outdir, ccdid, ampid)
     print '# writing', outfile
     header.update('DC3bPATH', outfile)
-    pyfits.PrimaryHDU(data, header).writeto(outfile, output_verify='silentfix', clobber=True)
+    pyfits.PrimaryHDU(data.astype(numpy.int16), header).writeto(outfile, output_verify='silentfix', clobber=True)
 
 
 if __name__ == '__main__':
