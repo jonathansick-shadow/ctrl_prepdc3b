@@ -64,7 +64,7 @@ if __name__ == '__main__':
             header = ptr[ccd].header
 
             # If you want to avoid any and all confusion with fits headers & data section
-            if 1:
+            if 0:
                 for keyword in ['DETSEC', 'DETSECA', 'DETSECB', 'DATASEC', 
                                 'ASECA', 'DSECA', 'TSECA', 'BSECA', 'CSECA', 
                                 'ASECB', 'DSECB', 'TSECB', 'BSECB', 'CSECB', 
