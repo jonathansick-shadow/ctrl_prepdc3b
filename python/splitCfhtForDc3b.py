@@ -26,7 +26,10 @@ def saveScience(data, header, basedir, fieldid, visitid, filterid, snapid, ccdid
     outfile = '%s/c%s-a%s.fits' % (outdir, ccdid, ampid)
     print '# writing', outfile
     header.update('DC3BPATH', outfile)
-    pyfits.PrimaryHDU(data.astype(numpy.int16), header).writeto(outfile, output_verify='silentfix', clobber=True)
+
+    hdu = pyfits.PrimaryHDU(data, header)
+    hdu.scale('int16', '', bscale = 1.0, bzero = 32768.0)
+    hdu.writeto(outfile, output_verify='silentfix', clobber=True)
     
 def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filter = None):
     # CFHTLS/%(dtype)/v%(dateid)/c%(ccdid)-a%(ampid).fits
@@ -45,7 +48,12 @@ def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filter =
     outfile = '%s/c%s-a%s.fits' % (outdir, ccdid, ampid)
     print '# writing', outfile
     header.update('DC3BPATH', outfile)
-    pyfits.PrimaryHDU(data.astype(numpy.int16), header).writeto(outfile, output_verify='silentfix', clobber=True)
+
+    hdu = pyfits.PrimaryHDU(data, header)
+    # not sure if these are ints or not
+    # hdu.scale('int16', '', bscale = 1.0, bzero = 32768.0)
+    hdu.writeto(outfile, output_verify='silentfix', clobber=True)
+
 
 
 if __name__ == '__main__':
@@ -82,7 +90,7 @@ if __name__ == '__main__':
             header = ptr[ccd].header
 
             # If you want to avoid any and all confusion with fits headers & data section
-            if 0:
+            if 1:
                 for keyword in ['DETSEC', 'DETSECA', 'DETSECB', 'DATASEC', 
                                 'ASECA', 'DSECA', 'TSECA', 'BSECA', 'CSECA', 
                                 'ASECB', 'DSECB', 'TSECB', 'BSECB', 'CSECB', 
