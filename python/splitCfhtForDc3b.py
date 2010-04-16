@@ -66,7 +66,6 @@ def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filterid
     # note : potential issue, is that the cals have the overscan
     # borders, and I am *not* setting their associated mask and
     # variance equal to 0x1 and NaN, respectively.
-    sys.exit(1)
 
 
 
