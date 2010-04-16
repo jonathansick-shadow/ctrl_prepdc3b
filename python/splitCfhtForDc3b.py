@@ -9,6 +9,8 @@ import sys
 import os
 import pyfits
 import numpy
+import lsst.afw.image as afwImage
+import lsst.afw.image.testUtils as testUtils
 
 # where do you want the data to end up
 BASEDIR = None
@@ -31,12 +33,12 @@ def saveScience(data, header, basedir, fieldid, visitid, filterid, snapid, ccdid
     hdu.scale('int16', '', bscale = 1.0, bzero = 32768.0)
     hdu.writeto(outfile, output_verify='silentfix', clobber=True)
     
-def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filter = None):
+def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filterid):
     # CFHTLS/%(dtype)/v%(dateid)/c%(ccdid)-a%(ampid).fits
     # -- or --
     # CFHTLS/%(dtype)/v%(dateid)-f%(filterid)/c%(ccdid)-a%(ampid).fits
 
-    if filter == None:
+    if filterid == None:
         #outdir = '%s/CFHTLS/%s/v%s' % (basedir, dtype, dateid)
         outdir = '%s/%s/v%s' % (basedir, dtype, dateid)
     else:
@@ -46,13 +48,25 @@ def saveCalibration(data, header, basedir, dtype, dateid, ccdid, ampid, filter =
         os.makedirs(outdir)
     
     outfile = '%s/c%s-a%s.fits' % (outdir, ccdid, ampid)
-    print '# writing', outfile
-    header.update('DC3BPATH', outfile)
 
-    hdu = pyfits.PrimaryHDU(data, header)
-    # not sure if these are ints or not
-    # hdu.scale('int16', '', bscale = 1.0, bzero = 32768.0)
-    hdu.writeto(outfile, output_verify='silentfix', clobber=True)
+    # we need to be a bit more tricky with the cals, since they should
+    # be masked images.  since pyfits has a problem with MEFs with
+    # different types, just use the build system for making the cals.
+    # we don't need (I don't think?) the header information as much as
+    # we need it for the science images
+    if dtype == 'bias':
+        retType = afwImage.MaskedImageI
+    else:
+        retType = afwImage.MaskedImageF
+    mi = testUtils.maskedImageFromArrays( [data.T, 0 * data.T, 0 * data.T],
+                                          retType=retType)
+    print '# writing', outfile
+    mi.writeFits(outfile)
+
+    # note : potential issue, is that the cals have the overscan
+    # borders, and I am *not* setting their associated mask and
+    # variance equal to 0x1 and NaN, respectively.
+    sys.exit(1)
 
 
 
@@ -63,9 +77,16 @@ if __name__ == '__main__':
             basedir = os.path.dirname(os.path.abspath(file))
         else:
             basedir = BASEDIR
-            
         ptr     = pyfits.open(file)
         head    = ptr[0].header
+
+        if head['OBSTYPE'] == 'BIAS' or head['OBSTYPE'] == 'FLAT' or head['OBSTYPE'] == 'FRINGE':
+            isCal = True
+            dtype = head['OBSTYPE'].lower()
+            dateid = head['CRUNID']
+        else:
+            isCal = False
+
 
         # Some of the wides have e.g. 'w3' instead of 'W3'
         fieldid  = string.capitalize('%s' % (head['OBJECT'][:2]))
@@ -76,8 +97,12 @@ if __name__ == '__main__':
             filterid = '%s%s' % (filter[0], filter[-1])   # only 1 character
         else:
             filterid = '%s' % (head['FILTER'][0])   # only 1 character
-        snapid   = '%02d' % (0)                 # alyways, no cosmic ray splits
+        snapid   = '%02d' % (0)                 # always, no cosmic ray splits
 
+        # lets send no filter for dark and bias
+        if dtype == 'bias' or dtype == 'dark':
+            filterid = None
+        
         for ccd in range(1, len(ptr)):
             # Details:
             #
@@ -101,11 +126,21 @@ if __name__ == '__main__':
             cfhtAmpB  = data[0:4644, 1056:2112]
 
             headerA = header.copy()
-            saveScience(cfhtAmpA, headerA, basedir, fieldid, visitid, filterid, snapid, '%02d' % (ccd-1), 0)
+            if isCal:
+                saveCalibration(cfhtAmpA, headerA, basedir,
+                                dtype, dateid, '%02d' % (ccd-1), 0, filterid)
+            else:
+                saveScience(cfhtAmpA, headerA, basedir,
+                            fieldid, visitid, filterid, snapid, '%02d' % (ccd-1), 0)
             
             headerB = header.copy()
-            crpix1 = headerB['CRPIX1']
-            headerB.update('CRPIX1', crpix1 + 1024)
-            saveScience(cfhtAmpB, headerB, basedir, fieldid, visitid, filterid, snapid, '%02d' % (ccd-1), 1)
+            if isCal:
+                saveCalibration(cfhtAmpB, headerB, basedir,
+                                 dtype, dateid, '%02d' % (ccd-1), 1, filterid)
+            else:
+                crpix1 = headerB['CRPIX1']
+                headerB.update('CRPIX1', crpix1 + 1024)
+                saveScience(cfhtAmpB, headerB, basedir,
+                            fieldid, visitid, filterid, snapid, '%02d' % (ccd-1), 1)
                         
             #print data.shape, cfhtAmpA.shape, cfhtAmpB.shape
