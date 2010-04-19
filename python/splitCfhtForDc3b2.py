@@ -95,6 +95,7 @@ if __name__ == '__main__':
             # Type of observation
             if md1.get('OBSTYPE').strip() == 'BIAS' or \
                md1.get('OBSTYPE').strip() == 'FLAT' or \
+               md1.get('OBSTYPE').strip() == 'DARK' or \
                md1.get('OBSTYPE').strip() == 'FRINGE':
                 isCal = True
                 dtype = md1.get('OBSTYPE').strip().lower()
