@@ -71,9 +71,13 @@ if __name__ == '__main__':
         else:
             basedir = BASEDIR
 
-        for ccd in range(2, 20):
-            dim1 = afwImage.DecoratedImageF(file, ccd, bbox1)
-            dim2 = afwImage.DecoratedImageF(file, ccd, bbox2)
+        for ccd in range(2, 38):
+            try:
+                dim1 = afwImage.DecoratedImageF(file, ccd, bbox1)
+                dim2 = afwImage.DecoratedImageF(file, ccd, bbox2)
+            except Exception, e:
+                print 'FAILED', e
+                sys.exit(1)
 
             md1 = dim1.getMetadata()
             md2 = dim2.getMetadata()
