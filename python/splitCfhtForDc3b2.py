@@ -39,6 +39,9 @@ def saveCalibration(dim, basedir, dtype, dateid, ccdid, ampid, filterid):
 
     if filterid == None:
         outdir = '%s/%s/v%s' % (basedir, dtype, dateid)
+        if dtype == 'dark':
+            outdir = '%s/%s/v%s-e%d' % (basedir, dtype, dateid, int(dim.getMetadata().get('DARKTIME')))
+            
     else:
         outdir = '%s/%s/v%s-f%s' % (basedir, dtype, dateid, filterid)
     if not os.path.isdir(outdir):
