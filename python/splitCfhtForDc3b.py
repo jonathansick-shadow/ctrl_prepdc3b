@@ -4,6 +4,9 @@
 #
 # http://dev.lsstcorp.org/trac/wiki/DC3bDataOrganization 
 
+# THIS VERSION USES PYFITS AND ENDS UP BEING VERY SLOW WHEN CONVERTING
+# TO IMAGES/MASKDIMGES.
+
 import string
 import sys
 import os
