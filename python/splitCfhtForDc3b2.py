@@ -24,12 +24,8 @@ def saveScience(dim, basedir, fieldid, visitid, filterid, snapid, ccdid, ampid):
     outfile = '%s/c%s-a%s.fits' % (outdir, ccdid, ampid)
     print '# writing', outfile
 
-    # convert to exposure
-    exp = afwImage.ExposureF(afwImage.MaskedImageF(dim.getImage()), afwImage.Wcs())
-    exp.setMetadata(dim.getMetadata())
-    
-    exp.getMetadata().set('DC3BPATH', outfile)
-    exp.writeFits(outfile)
+    dim.getMetadata().set('DC3BPATH', outfile)
+    dim.writeFits(outfile)
 
     
 def saveCalibration(dim, basedir, dtype, dateid, ccdid, ampid, filterid):
