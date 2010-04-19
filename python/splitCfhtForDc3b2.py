@@ -71,7 +71,7 @@ if __name__ == '__main__':
         else:
             basedir = BASEDIR
 
-        for ccd in range(2, 20):
+        for ccd in range(2, 19):
             dim1 = afwImage.DecoratedImageF(file, ccd, bbox1)
             dim2 = afwImage.DecoratedImageF(file, ccd, bbox2)
 
