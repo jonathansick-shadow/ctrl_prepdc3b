@@ -11,7 +11,10 @@ import lsst.daf.base as dafBase
 import lsst.afw.image as afwImage
 
 # where do you want the data to end up
-BASEDIR = None
+if os.environ['HOSTNAME'].endswith('ncsa.uiuc.edu'):
+    BASEDIR = '/lsst/DC3/data/obstest/CFHTLS'
+else:
+    BASEDIR = None
 
 
 def saveScience(dim, basedir, fieldid, visitid, filterid, snapid, ccdid, ampid):
