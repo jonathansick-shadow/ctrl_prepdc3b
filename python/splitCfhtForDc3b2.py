@@ -35,14 +35,15 @@ def saveCalibration(dim, basedir, dtype, dateid, ccdid, ampid, filterid):
     # CFHTLS/%(dtype)/v%(dateid)/c%(ccdid)-a%(ampid).fits
     # -- or --
     # CFHTLS/%(dtype)/v%(dateid)-f%(filterid)/c%(ccdid)-a%(ampid).fits
+    
 
     if filterid == None:
-        outdir = '%s/%s/v%s' % (basedir, dtype, dateid)
+        outdir = '%s/calib/%s/v%s' % (basedir, dtype, dateid)
         if dtype == 'dark':
-            outdir = '%s/%s/v%s-e%d' % (basedir, dtype, dateid, int(dim.getMetadata().get('DARKTIME')))
-            
+            outdir = '%s/calib/%s/v%s-e%d' % (basedir, dtype, dateid, int(dim.getMetadata().get('DARKTIME')))
     else:
-        outdir = '%s/%s/v%s-f%s' % (basedir, dtype, dateid, filterid)
+        outdir = '%s/calib/%s/v%s-f%s' % (basedir, dtype, dateid, filterid)
+        
     if not os.path.isdir(outdir):
         os.makedirs(outdir)
     
