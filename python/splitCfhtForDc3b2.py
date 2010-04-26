@@ -105,7 +105,11 @@ if __name__ == '__main__':
                md1.get('OBSTYPE').strip() == 'FRINGE':
                 isCal = True
                 dtype = md1.get('OBSTYPE').strip().lower()
-                dateid = md1.get('CRUNID').strip()
+                try:
+                    dateid = md1.get('CRUNID').strip()
+                except Exception, e:
+                    # some data don't have this in there; grab from filename
+                    dateid = os.path.basename(file).split('.')[0]
                 
                 # lets send no filter for dark and bias
                 if dtype == 'bias' or dtype == 'dark':
