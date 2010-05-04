@@ -53,7 +53,7 @@ def saveCalibration(dim, basedir, dtype, dateid, ccdid, ampid, filterid):
     # convert to exposure
     exp = afwImage.ExposureF(afwImage.MaskedImageF(dim.getImage()), afwImage.Wcs())
     exp.setMetadata(dim.getMetadata())
-
+    exp.setFilter(afwImage.Filter(filterid))
     exp.getMetadata().set('DC3BPATH', outfile)
     exp.writeFits(outfile)
 
