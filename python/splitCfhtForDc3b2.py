@@ -6,9 +6,12 @@
 
 # THIS VERSION USES AFW
 
+import eups
 import sys, os, string
 import lsst.daf.base as dafBase
 import lsst.afw.image as afwImage
+import lsst.afw.image.utils as imageUtils
+import lsst.pex.policy as pexPolicy
 
 # where do you want the data to end up
 if os.environ['HOSTNAME'].endswith('ncsa.uiuc.edu'):
@@ -16,6 +19,10 @@ if os.environ['HOSTNAME'].endswith('ncsa.uiuc.edu'):
 else:
     BASEDIR = None
 
+
+filterPolicy = pexPolicy.Policy.createPolicy(
+    os.path.join(eups.productDir("obs_cfht"), "megacam/description/", "MegacamFilters.paf"), True)
+imageUtils.defineFiltersFromPolicy(filterPolicy, reset=True)
 
 def saveScience(dim, basedir, fieldid, visitid, filterid, snapid, ccdid, ampid):
     # CFHTLS/%(field)/raw/v%(visitid)-f%(filterid)/s%(snapid)/c%(ccdid)-a%(ampid).fits
