@@ -93,13 +93,13 @@ for ccd in range(1, 37):
 
             # don't extend off the right
             if (bbox.getX1() - 32) > 2047:
-                buff.write('                x1: %d \n' % (2047)
+                buff.write('                x1: %d \n' % (2047))
             else:
                 buff.write('                x1: %d \n' % (bbox.getX1() - 32))
 
             # don't extend off the top
             if bbox.getY1() > 4611:
-                buff.write('                y1: %d \n' % (4611)
+                buff.write('                y1: %d \n' % (4611))
             else:
                 buff.write('                y1: %d \n' % (bbox.getY1()))
                 
@@ -111,13 +111,13 @@ buff.write('} \n')
 buff.close()
 
 # cd /lsst/home/becker/lsst_devel/obs_cfht/megacam/description/defects
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.00.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.00.n.paf
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.01.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.01.n.paf
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.02.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.02.n.paf
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2004B.mask.0.36.00.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2004B.mask.0.36.00.n.paf
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2004B.mask.0.36.01.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2004B.mask.0.36.01.n.paf
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.00.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.00.paf
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.01.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.01.paf
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.02.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.02.paf
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.03.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.03.paf
-#~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.04.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.04.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.00.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.00.n.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.01.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.01.n.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.02.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.02.n.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2004B.mask.0.36.00.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2004B.mask.0.36.00.n.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2004B.mask.0.36.01.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2004B.mask.0.36.01.n.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.00.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.00.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.01.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.01.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.02.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.02.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.03.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.03.paf
+#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.04.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.04.paf
