@@ -12,8 +12,11 @@ maskFormat = re.compile('^\[(\d+):(\d+),(\d+):(\d+)\]$')
 leftBox = afwImage.BBox(afwImage.PointI(0, 0),
                         afwImage.PointI(31, 4643))
 
-topBox  = afwImage.BBox(afwImage.PointI(0, 4611),
-                        afwImage.PointI(2111, 4643))
+# we actually need the bottom row of this top box
+topBox0  = afwImage.BBox(afwImage.PointI(0, 4611),
+                         afwImage.PointI(2111, 4643))
+topBox1  = afwImage.BBox(afwImage.PointI(0, 4611),
+                         afwImage.PointI(2111, 4611))
 
 rightBox = afwImage.BBox(afwImage.PointI(2080, 0),
                          afwImage.PointI(2111, 4643))
@@ -71,8 +74,10 @@ for ccd in range(1, 37):
             bbox  = afwImage.BBox(afwImage.PointI(group[0]-1, group[1]-1),
                                   afwImage.PointI(group[2]-1, group[3]-1))
 
-            if bbox == leftBox or bbox == topBox or bbox == rightBox:
+            if bbox == leftBox or bbox == rightBox:
                 continue
+            if bbox == topBox0:
+                bbox = topBox1
 
             buff.write('            Defect: { \n')
 
@@ -82,10 +87,22 @@ for ccd in range(1, 37):
                 buff.write('                x0: %d \n' % (bbox.getX0()))
             else:
                 buff.write('                x0: %d \n' % (bbox.getX0() - 32))
-                
+
+            # only coordinate that seems OK
             buff.write('                y0: %d \n' % (bbox.getY0()))
-            buff.write('                x1: %d \n' % (bbox.getX1() - 32))
-            buff.write('                y1: %d \n' % (bbox.getY1()))
+
+            # don't extend off the right
+            if (bbox.getX1() - 32) > 2047:
+                buff.write('                x1: %d \n' % (2047)
+            else:
+                buff.write('                x1: %d \n' % (bbox.getX1() - 32))
+
+            # don't extend off the top
+            if bbox.getY1() > 4611:
+                buff.write('                y1: %d \n' % (4611)
+            else:
+                buff.write('                y1: %d \n' % (bbox.getY1()))
+                
             buff.write('            } \n')
 
     buff.write('        } \n')
