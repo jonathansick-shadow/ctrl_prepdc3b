@@ -100,8 +100,8 @@ for ccd in range(1, 37):
                 buff.write('                x1: %d \n' % (bbox.getX1() - 32))
 
             # don't extend off the top
-            # ymax = 4611  # took off top row
-            ymax = 4610
+            # ymax = 4611  # took off top row (and bottom!  n-2)
+            ymax = 4609
             if bbox.getY1() > ymax:
                 buff.write('                y1: %d \n' % (ymax))
             else:
