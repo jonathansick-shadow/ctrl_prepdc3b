@@ -89,7 +89,9 @@ for ccd in range(1, 37):
                 buff.write('                x0: %d \n' % (bbox.getX0() - 32))
 
             # only coordinate that seems OK
-            buff.write('                y0: %d \n' % (bbox.getY0()))
+            #
+            # not anymore, we are getting rid of the first (and last) row
+            buff.write('                y0: %d \n' % (bbox.getY0() - 1))
 
             # don't extend off the right
             if (bbox.getX1() - 32) > 2047:
@@ -98,8 +100,10 @@ for ccd in range(1, 37):
                 buff.write('                x1: %d \n' % (bbox.getX1() - 32))
 
             # don't extend off the top
-            if bbox.getY1() > 4611:
-                buff.write('                y1: %d \n' % (4611))
+            # ymax = 4611  # took off top row
+            ymax = 4610
+            if bbox.getY1() > ymax:
+                buff.write('                y1: %d \n' % (ymax))
             else:
                 buff.write('                y1: %d \n' % (bbox.getY1()))
                 
