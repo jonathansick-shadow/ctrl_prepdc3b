@@ -189,10 +189,10 @@ if __name__ == '__main__':
             else:
                 saveScience(dim1, basedir, fieldid, visitid, filterid, snapid, '%02d' % (ccd-2), 0)
                 crpix1 = md2.get('CRPIX1')
-                md2.set('CRPIX1', crpix1 + 1024)
+                md2.set('CRPIX1', crpix1 - 1024)
                 saveScience(dim2, basedir, fieldid, visitid, filterid, snapid, '%02d' % (ccd-2), 1)
 
             del dim1, dim2
 
-        cmd = 'gzip %s' % (file)
-        os.system(cmd)
+        #cmd = 'gzip %s' % (file)
+        #os.system(cmd)

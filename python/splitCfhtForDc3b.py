@@ -164,7 +164,7 @@ if __name__ == '__main__':
                                  dtype, dateid, '%02d' % (ccd-1), 1, filterid)
             else:
                 crpix1 = headerB['CRPIX1']
-                headerB.update('CRPIX1', crpix1 + 1024)
+                headerB.update('CRPIX1', crpix1 - 1024)
                 saveScience(cfhtAmpB, headerB, basedir,
                             fieldid, visitid, filterid, snapid, '%02d' % (ccd-1), 1)
                         
