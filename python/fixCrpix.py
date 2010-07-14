@@ -14,6 +14,8 @@ for dir1 in dirs:
             fullfile = os.path.join(s00, file)
             dim   = afwImage.DecoratedImageF(fullfile)
             md    = dim.getMetadata()
+            if md.exists('CRPIX1acb'):
+                continue
             crpix = md.get('CRPIX1')
             md.set('CRPIX1acb', crpix)
             md.set('CRPIX1', crpix - 2048)
