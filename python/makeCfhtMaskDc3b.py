@@ -1,7 +1,7 @@
-# 
+#
 # LSST Data Management System
 # Copyright 2008, 2009, 2010 LSST Corporation.
-# 
+#
 # This product includes software developed by the
 # LSST Project (http://www.lsst.org/).
 #
@@ -9,14 +9,14 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
-# You should have received a copy of the LSST License Statement and 
-# the GNU General Public License along with this program.  If not, 
+#
+# You should have received a copy of the LSST License Statement and
+# the GNU General Public License along with this program.  If not,
 # see <http://www.lsstcorp.org/LegalNotices/>.
 #
 
@@ -35,34 +35,34 @@ leftBox = afwImage.BBox(afwImage.PointI(0, 0),
                         afwImage.PointI(31, 4643))
 
 # we actually need the bottom row of this top box
-topBox0  = afwImage.BBox(afwImage.PointI(0, 4611),
-                         afwImage.PointI(2111, 4643))
-topBox1  = afwImage.BBox(afwImage.PointI(0, 4611),
-                         afwImage.PointI(2111, 4611))
+topBox0 = afwImage.BBox(afwImage.PointI(0, 4611),
+                        afwImage.PointI(2111, 4643))
+topBox1 = afwImage.BBox(afwImage.PointI(0, 4611),
+                        afwImage.PointI(2111, 4611))
 
 rightBox = afwImage.BBox(afwImage.PointI(2080, 0),
                          afwImage.PointI(2111, 4643))
 
 
-inmask  = sys.argv[1] # mask definition
-inimage = sys.argv[2] # need serial numbers
-ptrM    = pyfits.open(inmask)
-ptrI    = pyfits.open(inimage)
+inmask = sys.argv[1]  # mask definition
+inimage = sys.argv[2]  # need serial numbers
+ptrM = pyfits.open(inmask)
+ptrI = pyfits.open(inimage)
 
 outfile = sys.argv[3]
-buff    = open(outfile, 'w')
+buff = open(outfile, 'w')
 buff.write('Defects: { \n')
 buff.write('    Raft: { \n')
 buff.write('        name: "R:0,0" \n')
- 
+
 
 for ccd in range(1, 37):
-    imHeader   = ptrI[ccd].header
-    serial     = imHeader['CCDNAME']
-    
+    imHeader = ptrI[ccd].header
+    serial = imHeader['CCDNAME']
+
     maskHeader = ptrM[ccd].header
-    nColMask   = maskHeader['NAXIS1']
-    nRowMask   = maskHeader['NAXIS2']
+    nColMask = maskHeader['NAXIS1']
+    nRowMask = maskHeader['NAXIS2']
 
     buff.write('        Ccd: { \n')
     buff.write('            name: "CFHT %d" \n' % (ccd - 1))
@@ -91,10 +91,8 @@ for ccd in range(1, 37):
                 continue
             group = map(int, match.groups())
 
-            
-
-            bbox  = afwImage.BBox(afwImage.PointI(group[0]-1, group[1]-1),
-                                  afwImage.PointI(group[2]-1, group[3]-1))
+            bbox = afwImage.BBox(afwImage.PointI(group[0]-1, group[1]-1),
+                                 afwImage.PointI(group[2]-1, group[3]-1))
 
             if bbox == leftBox or bbox == rightBox:
                 continue
@@ -128,22 +126,25 @@ for ccd in range(1, 37):
                 buff.write('                y1: %d \n' % (ymax))
             else:
                 buff.write('                y1: %d \n' % (bbox.getY1()))
-                
+
             buff.write('            } \n')
 
     buff.write('        } \n')
 buff.write('    } \n')
-buff.write('} \n')                                   
+buff.write('} \n')
 buff.close()
 
 # cd /lsst/home/becker/lsst_devel/obs_cfht/megacam/description/defects
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.00.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.00.n.paf
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.01.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.01.n.paf
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.02.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.02.n.paf
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2004B.mask.0.36.00.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2004B.mask.0.36.00.n.paf
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2004B.mask.0.36.01.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2004B.mask.0.36.01.n.paf
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.00.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.00.paf
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.01.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.01.paf
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.02.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.02.paf
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.03.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.03.paf
-#python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.04.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.04.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.00.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.00.n.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.01.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.01.n.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2003B.mask.0.36.02.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2003B.mask.0.36.02.n.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2004B.mask.0.36.00.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2004B.mask.0.36.00.n.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/2004B.mask.0.36.01.n.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits 2004B.mask.0.36.01.n.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.00.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.00.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.01.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.01.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.02.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.02.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.03.fits /home/becker/repositoryDc3b/CFHTWide/704382o.fits static.mask.0.36.03.paf
+# python ~/lsst_devel/prepdc3b/python/makeCfhtMaskDc3b.py
+# /home/becker/repositoryDc3b/CFHTCalib/static.mask.0.36.04.fits
+# /home/becker/repositoryDc3b/CFHTWide/704382o.fits
+# static.mask.0.36.04.paf

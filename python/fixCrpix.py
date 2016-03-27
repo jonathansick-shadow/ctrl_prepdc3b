@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 import lsst.afw.image as afwImage
 
 BASEDIR = '/usr/data/mysql1/CFHT/CFHTDeep/'
@@ -12,8 +13,8 @@ for dir1 in dirs:
             if not file.endswith('a1.fits'):
                 continue
             fullfile = os.path.join(s00, file)
-            dim   = afwImage.DecoratedImageF(fullfile)
-            md    = dim.getMetadata()
+            dim = afwImage.DecoratedImageF(fullfile)
+            md = dim.getMetadata()
             if md.exists('CRPIX1acb'):
                 continue
             crpix = md.get('CRPIX1')
